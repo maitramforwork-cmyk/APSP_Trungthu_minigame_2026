@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#6d1b11" />
+  <meta name="description" content="Mini-game Trung Thu: One-line Connect the Dots và Gieo Quẻ." />
+  <title>Trăng Rằm Tỏa Sáng — Một Nét Đón Quẻ</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="site-shell">
+    <div class="ambient ambient-1"></div>
+    <div class="ambient ambient-2"></div>
+    <div class="starfield" aria-hidden="true"></div>
+
+    <main class="app" id="app" aria-live="polite">
+      <header class="topbar">
+        <button class="brand" type="button" data-action="home" aria-label="Về màn hình đầu">
+          <span class="brand-orb">☾</span>
+          <span>
+            <strong>TRĂNG RẰM TỎA SÁNG</strong>
+            <small>MỘT NÉT ĐÓN QUẺ</small>
+          </span>
+        </button>
+        <div class="progress" id="progress" aria-label="Tiến trình trò chơi"></div>
+      </header>
+
+      <section class="screen" id="screen" tabindex="-1"></section>
+    </main>
+  </div>
+
+  <div class="cursor-star" id="cursor-star" aria-hidden="true">✦</div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+  <script src="app.js"></script>
+</body>
+</html>
