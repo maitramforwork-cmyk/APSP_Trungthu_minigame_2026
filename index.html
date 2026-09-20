@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#120c2b">
+  <title>Trăng Rằm Tỏa Sáng · Nối Điểm Đón Quẻ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="app" class="app">
+    <div class="bg-image" aria-hidden="true"></div>
+    <div class="bg-overlay" aria-hidden="true"></div>
+    <div class="stars-layer" id="starsLayer" aria-hidden="true"></div>
+    <div class="moon" aria-hidden="true"><span></span></div>
+    <div class="cloud cloud-1" aria-hidden="true"></div>
+    <div class="cloud cloud-2" aria-hidden="true"></div>
+
+    <div id="cursorStar" class="cursor-star" aria-hidden="true">✦</div>
+    <div id="confetti" class="confetti" aria-hidden="true"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <!-- WELCOME -->
+    <main id="welcomeScreen" class="screen active">
+      <header class="hero-header">
+        <div class="brand-badge">TRUNG THU 2026</div>
+        <div class="hero-copy">
+          <div class="eyebrow">MINI GAME · CONNECT THE DOTS</div>
+          <h1>Trăng Rằm<br><em>Tỏa Sáng</em></h1>
+          <p>Nối lần lượt các điểm sáng, hoàn thiện hình ảnh Trung thu và mở khóa một lần gieo quẻ may mắn.</p>
+        </div>
+      </header>
+
+      <section class="welcome-card glass-card">
+        <div class="welcome-main">
+          <div class="howto">
+            <span class="section-label">CÁCH CHƠI</span>
+            <h2>Nối một đường đi qua toàn bộ các điểm</h2>
+            <div class="rule-grid">
+              <article><span class="rule-icon">①</span><div><b>Bắt đầu</b><small>Chạm/nhấn vào điểm đang sáng.</small></div></article>
+              <article><span class="rule-icon">↗</span><div><b>Kéo nối</b><small>Giữ và kéo tới điểm sáng tiếp theo.</small></div></article>
+              <article><span class="rule-icon">✦</span><div><b>Hoàn thành</b><small>Đủ điểm sẽ hiện popup chúc mừng.</small></div></article>
+            </div>
+          </div>
+          <div class="welcome-actions">
+            <button id="startBtn" class="primary-btn primary-large">BẮT ĐẦU</button>
+            <div class="microcopy">4 level · 1 lần gieo quẻ · Chơi mượt trên mobile</div>
+          </div>
+        </div>
+
+        <div class="welcome-scene" aria-hidden="true">
+          <div class="scene-moon"></div>
+          <div class="scene-lantern lantern-a"></div>
+          <div class="scene-lantern lantern-b"></div>
+          <div class="scene-bunny bunny-run">🐇</div>
+          <div class="scene-bunny bunny-run bunny-delay">🐇</div>
+          <div class="scene-ground"></div>
+          <div class="scene-spark s1">✦</div>
+          <div class="scene-spark s2">✦</div>
+          <div class="scene-spark s3">✦</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- GAME -->
+    <main id="gameScreen" class="screen">
+      <div class="game-topbar">
+        <button id="backBtn" class="icon-btn" type="button" aria-label="Quay lại">←</button>
+        <div class="game-brand"><span class="mini-moon">☾</span><b>NỐI ĐIỂM ĐÓN QUẺ</b></div>
+        <div class="status-pills">
+          <span id="levelPill" class="status-pill">LEVEL 1/4</span>
+          <span id="timerPill" class="status-pill">⏱ 00:00</span>
+          <span id="mistakePill" class="status-pill">✦ 0 lỗi</span>
+        </div>
+      </div>
+
+      <section class="game-shell">
+        <div class="level-progress glass-card">
+          <div id="progressSteps" class="progress-steps"></div>
+          <div class="progress-metric"><span id="progressLabel">0 / 20</span><div class="progress-track"><span id="progressBar"></span></div></div>
+        </div>
+
+        <div class="game-layout">
+          <section class="board-card glass-card">
+            <div class="board-head">
+              <div>
+                <div id="levelKicker" class="section-label">LEVEL 1 · DỄ</div>
+                <h2 id="levelTitle">Bánh Trung thu</h2>
+                <p id="levelDesc">Nối 20 điểm để hoàn thiện mặt bánh và mở khóa lời chúc.</p>
+              </div>
+              <div class="board-tools">
+                <button id="hintBtn" class="secondary-btn" type="button">💡 Gợi ý <span id="hintCount">3</span></button>
+                <button id="resetBtn" class="secondary-btn" type="button">↻ Trộn lại</button>
+              </div>
+            </div>
+
+            <div class="board-wrap">
+              <div id="board" class="game-board">
+                <img id="ghostArt" class="ghost-art" src="" alt="">
+                <canvas id="gameCanvas"></canvas>
+                <div class="board-title-tag" id="boardTag">BÁNH TRUNG THU · 1 → 20</div>
+                <div class="pointer-tip">Kéo từ số đang sáng tới số kế tiếp</div>
+              </div>
+            </div>
+
+            <div class="board-foot">
+              <span>🎮 Desktop: kéo chuột · Mobile: chạm & kéo</span>
+              <span id="scoreLabel">0 điểm</span>
+            </div>
+          </section>
+
+          <aside class="side-card glass-card">
+            <div class="side-header"><span class="section-label">HƯỚNG DẪN NHANH</span><span class="moon-seal">月</span></div>
+            <div class="side-copy">Điểm kế tiếp luôn được làm sáng. Bắt đầu kéo từ đó và thả đúng tâm điểm.</div>
+            <div class="side-preview" id="sidePreview">
+              <div class="preview-moon"></div>
+              <div class="preview-spark">✦</div>
+              <div class="preview-note">Nối càng chính xác<br>càng nhiều điểm thưởng.</div>
+            </div>
+            <div class="stat-list">
+              <div><span>Điểm</span><b id="sideScore">0</b></div>
+              <div><span>Lỗi</span><b id="sideMistakes">0</b></div>
+              <div><span>Tiến độ</span><b id="sideProgress">0/20</b></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <!-- FORTUNE -->
+    <main id="fortuneScreen" class="screen">
+      <div class="fortune-shell">
+        <div class="fortune-hero">
+          <div class="eyebrow">CHÚC MỪNG · BẠN ĐÃ PHÁ ĐẢO</div>
+          <h2>Mở một <em>Quẻ Trung Thu</em></h2>
+          <p>Chọn một chủ đề. Ống quẻ sẽ lắc và gửi tới bạn một lời chúc ngẫu nhiên.</p>
+        </div>
+
+        <section class="fortune-panel glass-card">
+          <div id="fortuneShake" class="fortune-shake" aria-hidden="true">
+            <div class="tube-cap"></div>
+            <div class="fortune-tube"><span></span><span></span><span></span><span></span><span></span></div>
+            <div class="tube-base"></div>
+          </div>
+
+          <div id="categoryGrid" class="category-grid">
+            <button class="category-btn" data-category="Sự nghiệp"><span>💼</span><b>Sự nghiệp</b><small>Mở vận công việc</small></button>
+            <button class="category-btn" data-category="Gia đình"><span>🏮</span><b>Gia đình</b><small>Gieo bình an</small></button>
+            <button class="category-btn" data-category="Tình cảm"><span>🌙</span><b>Tình cảm</b><small>Đón duyên lành</small></button>
+            <button class="category-btn" data-category="Tiền bạc"><span>🧧</span><b>Tiền bạc</b><small>Gọi lộc về nhà</small></button>
+          </div>
+
+          <div id="fortuneResult" class="fortune-result empty-state">
+            <span class="result-seal">月</span>
+            <h3>Chọn một danh mục</h3>
+            <p>Quẻ sẽ xuất hiện tại đây.</p>
+          </div>
+
+          <div class="fortune-footer">
+            <button id="reRollBtn" class="secondary-btn" type="button">🎲 Gieo lại</button>
+            <button id="playAgainBtn" class="primary-btn" type="button">Chơi lại từ đầu</button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- SUCCESS MODAL -->
+    <div id="successModal" class="modal-backdrop" aria-hidden="true">
+      <section class="modal-card success-modal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+        <div class="modal-burst">✦</div>
+        <div class="success-seal">月</div>
+        <div class="section-label">HOÀN THÀNH LEVEL</div>
+        <h2 id="successTitle">Bạn làm được!</h2>
+        <p id="successText">Đã nối đủ các điểm và hoàn thiện hình.</p>
+        <div class="success-stats"><span id="successScore">+0 điểm</span><span id="successTime">00:00</span></div>
+        <button id="nextBtn" class="primary-btn primary-large">Chơi Level tiếp theo →</button>
+      </section>
+    </div>
+
+    <div id="errorModal" class="modal-backdrop" aria-hidden="true">
+      <section class="modal-card compact-modal" role="dialog" aria-modal="true">
+        <div class="success-seal">✦</div>
+        <h2>Chưa đúng thứ tự</h2>
+        <p>Hãy nối từ điểm <b id="expectedNumber">1</b>. Điểm khác sẽ không được ghi nhận.</p>
+        <button id="closeErrorBtn" class="primary-btn">Đã hiểu</button>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/game-data.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
